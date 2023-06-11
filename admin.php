@@ -1,4 +1,21 @@
 <?php
+@include 'config.php';
+if(isset(@$_POST['add_product'])){
+	$p_name = $_POST['p_name'];
+	$p_price = $_POST['p_price'];
+	$p_image = $_POST['p_image']['name'];
+	$p_image_tmp_name = $_FILES['p_image']['tmp_name'];
+	$p_image_folder = 'uploaded_img/'.$p_image;
+
+	$insert_query = mysql_query($conn, "INSERT INTO 'products'(name,price,image) VALUES 
+	('$p_name','$p_price', '$p_image')") or die('query failed');
+
+	if($insert_query){
+		move_uploaded_file($p_image_tmp_name, $p_image_folder);
+		$message[] = 'product add succesfully';
+	}
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -18,6 +35,16 @@
 
 </head>
 <body>
+
+<?php
+ if(isset($message)){
+ 	foreach ($message as $message) {
+ 		echo '<div class="message"><span>'.message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = none'';"> </i></div>';
+ 	}
+ };
+?>
+
+
 	<?php include 'header.php';?>
 
 
